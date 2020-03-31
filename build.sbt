@@ -3,7 +3,7 @@ lazy val root =  Project(id = "busylabs-2020", base = file("."))
 .settings(compilerSettings)
 .aggregate(lab01)
 
-lazy val lab01 = Project(id = "busylabs-2020", base = file("labs/01"))
+lazy val lab01 = Project(id = "lab-01", base = file("labs/01"))
 .settings(compilerSettings)
 
 lazy val scalaV = "2.13.1" //https://github.com/scala/scala/releases 
