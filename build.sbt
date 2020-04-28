@@ -1,15 +1,15 @@
 lazy val root = Project(id = "busylabs-2020", base = file("."))
   .settings(compilerSettings)
-  .aggregate(lab01, lab02)
+  .aggregate(lab01, lab04)
 
 lazy val lab01 = Project(id = "lab-01", base = file("labs/01"))
   .settings(compilerSettings)
 
-lazy val lab02 = Project(id = "lab-02", base = file("labs/02"))
+lazy val lab04 = Project(id = "lab-04", base = file("labs/04"))
   .settings(compilerSettings)
   .dependsOn(lab01)
 
-lazy val scalaV = "2.13.1" //https://github.com/scala/scala/releases
+lazy val scalaV = "2.13.2" //https://github.com/scala/scala/releases
 
 //https://github.com/typelevel/kind-projector/releases
 lazy val kindProjector = "org.typelevel" %% "kind-projector" % "0.11.0"
