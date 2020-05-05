@@ -1,26 +1,95 @@
 lazy val root = Project(id = "busylabs-2020", base = file("."))
   .settings(compilerSettings)
-  .aggregate(lab01, lab04)
+  .settings(dependenciesSettings)
+  .aggregate(lab01, lab04, lab05)
 
 lazy val lab01 = Project(id = "lab-01", base = file("labs/01"))
   .settings(compilerSettings)
+  .settings(dependenciesSettings)
 
 lazy val lab04 = Project(id = "lab-04", base = file("labs/04"))
   .settings(compilerSettings)
-  .dependsOn(lab01)
+  .settings(dependenciesSettings)
 
-lazy val scalaV = "2.13.2" //https://github.com/scala/scala/releases
+lazy val lab05 = Project(id = "lab-05", base = file("labs/05"))
+  .settings(compilerSettings)
+  .settings(dependenciesSettings)
+
+val scalaV:             String = "2.13.2"    //https://github.com/scala/scala/releases
+val catsVersion:        String = "2.1.0"     //https://github.com/typelevel/cats/releases
+val catsEffectVersion:  String = "2.1.1"     //https://github.com/typelevel/cats-effect/releases
+val pureconfigVersion:  String = "0.12.2"    //https://github.com/pureconfig/pureconfig/releases
+val pureharmVersion:    String = "0.0.5-RC2" //https://github.com/busymachines/pureharm/releases
+val pureharmAWSVersion: String = "0.0.4-M3"  //https://github.com/busymachines/pureharm-aws/releases
+val log4catsVersion:    String = "1.0.1"     //https://github.com/ChristopherDavenport/log4cats/releases
+val logbackVersion:     String = "1.2.3"     //https://github.com/qos-ch/logback/releases
+val scalaTestVersion:   String = "3.1.1"     //https://github.com/scalatest/scalatest/releases
 
 //https://github.com/typelevel/kind-projector/releases
 lazy val kindProjector = "org.typelevel" %% "kind-projector" % "0.11.0"
 //https://github.com/oleg-py/better-monadic-for/releases
 lazy val betterMonadicFor = "com.olegpy" %% "better-monadic-for" % "0.3.1"
 
+//https://github.com/typelevel/cats/releases
+lazy val catsCore:    ModuleID = "org.typelevel" %% "cats-core"    % catsVersion withSources ()
+lazy val catsMacros:  ModuleID = "org.typelevel" %% "cats-macros"  % catsVersion withSources ()
+lazy val catsKernel:  ModuleID = "org.typelevel" %% "cats-kernel"  % catsVersion withSources ()
+lazy val catsLaws:    ModuleID = "org.typelevel" %% "cats-laws"    % catsVersion withSources ()
+lazy val catsTestkit: ModuleID = "org.typelevel" %% "cats-testkit" % catsVersion withSources ()
+
+//https://github.com/typelevel/cats-effect/releases
+lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % catsEffectVersion withSources ()
+
+//https://github.com/pureconfig/pureconfig/releases
+lazy val pureConfig: ModuleID = "com.github.pureconfig" %% "pureconfig" % pureconfigVersion withSources ()
+
+def pureharm(m: String): ModuleID = "com.busymachines" %% s"pureharm-$m" % pureharmVersion
+
+val pureharmCore:             ModuleID = pureharm("core")              withSources ()
+val pureharmCoreAnomaly:      ModuleID = pureharm("core-anomaly")      withSources ()
+val pureharmCorePhantom:      ModuleID = pureharm("core-phantom")      withSources ()
+val pureharmCoreIdentifiable: ModuleID = pureharm("core-identifiable") withSources ()
+val pureharmEffectsCats:      ModuleID = pureharm("effects-cats")      withSources ()
+val pureharmJsonCirce:        ModuleID = pureharm("json-circe")        withSources ()
+val pureharmConfig:           ModuleID = pureharm("config")            withSources ()
+
+def pureharmAWS(m: String): ModuleID = "com.busymachines" %% s"pureharm-aws-$m" % pureharmAWSVersion
+
+val pureharmAWSCore:       ModuleID = pureharmAWS("core")       withSources ()
+val pureharmAWSS3:         ModuleID = pureharmAWS("s3")         withSources ()
+val pureharmAWSCloudfront: ModuleID = pureharmAWS("cloudfront") withSources ()
+val pureharmAWSLogger:     ModuleID = pureharmAWS("logger")     withSources ()
+
+//https://github.com/ChristopherDavenport/log4cats/releases
+lazy val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % log4catsVersion withSources ()
+
+//https://github.com/qos-ch/logback/releases — it is the backend implementation used by log4cats-slf4j
+lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion withSources ()
+
 lazy val compilerSettings = Seq(
   organization in ThisBuild := "busymachines.com",
   scalaVersion              := scalaV,
+  addCompilerPlugin(kindProjector.cross(CrossVersion.full)),
   addCompilerPlugin(betterMonadicFor),
   scalacOptions ++= scala2_13CompilerFlags ++ betterForPluginCompilerFlags,
+)
+
+lazy val dependenciesSettings = Seq(
+  libraryDependencies ++= Seq(
+    catsCore,
+    catsMacros,
+    catsKernel,
+    catsLaws,
+    catsTestkit,
+    pureharmCore,
+    pureharmEffectsCats,
+    pureharmJsonCirce,
+    pureharmConfig,
+    pureharmAWSCore,
+    pureharmAWSS3,
+    log4cats,
+    logbackClassic,
+  ),
 )
 
 /**
