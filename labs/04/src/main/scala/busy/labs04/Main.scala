@@ -18,16 +18,6 @@ object Main extends App {
   val Solution = TrySol
   type Effect[+A] = Try[A]
 
-  sealed trait Fruit
-  case class Apple() extends Fruit
-
-  sealed trait Container[+A]
-
-  val lF: Container[Fruit] = ???
-  val lA: Container[Apple] = ???
-
-
-
 
 //  def broken(s: Any): Int = s.asInstanceOf[Int]
 
