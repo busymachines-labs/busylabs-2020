@@ -87,6 +87,7 @@ lazy val dependenciesSettings = Seq(
     pureharmConfig,
     pureharmAWSCore,
     pureharmAWSS3,
+    pureharmAWSCloudfront,
     log4cats,
     logbackClassic,
   ),
